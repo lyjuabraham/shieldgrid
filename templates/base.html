@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IPS Security Console</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">IPS</div>
+          <div>
+            <h1>Security Console</h1>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+          <a href="{{ url_for('incidents') }}" class="nav-link">Incidents</a>
+          <a href="{{ url_for('rules') }}" class="nav-link">Signature Rules</a>
+          <a href="{{ url_for('policies') }}" class="nav-link">Policies</a>
+        </nav>
+
+        <div class="panel small-panel">
+          <p class="panel-label">Protection Status</p>
+          <div class="status-line">
+            <span class="dot dot-online"></span>
+            Monitoring active
+          </div>
+          <div class="status-line">
+            <span class="dot dot-alert"></span>
+            3 high-priority events
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <section class="flash-stack" aria-live="polite">
+              {% for category, message in messages %}
+                <div class="flash-banner flash-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </section>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

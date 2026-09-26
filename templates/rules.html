@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="topbar">
+    <div>
+      <p class="eyebrow">Threat Detection</p>
+      <h2>Signature Rules</h2>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Manage Detection Signatures</h3>
+    </div>
+
+    <div class="rule-list">
+      {% for rule in rules %}
+        <div class="rule-item">
+          <div>
+            <strong>{{ rule.name }}</strong>
+            <small>{{ rule.category }}</small>
+          </div>
+          <div>
+            <span>Severity</span>
+            <strong>{{ rule.severity }}</strong>
+          </div>
+          <div>
+            <span>Action</span>
+            <strong>{{ rule.action }}</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong>{{ 'Enabled' if rule.enabled else 'Disabled' }}</strong>
+          </div>
+          <div>
+            <small>{{ rule.description }}</small>
+          </div>
+          <div class="controls">
+            <form method="POST" action="{{ url_for('toggle_rule', rule_id=rule.id) }}">
+              <button class="secondary-btn" type="submit">{{ 'Disable' if rule.enabled else 'Enable' }}</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top: 20px;">
+    <div class="panel-header">
+      <h3>Add Custom Rule</h3>
+    </div>
+    <form method="POST" action="{{ url_for('add_rule') }}" class="form-grid">
+      <label>
+        Rule Name
+        <input type="text" name="name" value="SIG-8001" />
+      </label>
+      <label>
+        Category
+        <input type="text" name="category" value="Custom Detection" />
+      </label>
+      <label>
+        Severity
+        <select name="severity">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </label>
+      <label>
+        Action
+        <select name="action">
+          <option value="alert">Alert</option>
+          <option value="monitor">Monitor</option>
+          <option value="block" selected>Block</option>
+        </select>
+      </label>
+      <label class="wide-field">
+        Description
+        <textarea name="description">Detect new custom malicious pattern in HTTP and SMTP traffic.</textarea>
+      </label>
+      <button class="primary-btn" type="submit">Add Rule</button>
+    </form>
+  </section>
+{% endblock %}
