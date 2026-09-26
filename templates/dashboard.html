@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="topbar">
+    <div>
+      <p class="eyebrow">Security Monitoring</p>
+      <h2>Intrusion Prevention Dashboard</h2>
+    </div>
+    <button class="primary-btn" onclick="document.getElementById('trigger-form').scrollIntoView({behavior: 'smooth'})">Trigger Test Event</button>
+  </div>
+
+  <section class="stats-grid">
+    <div class="stat-card">
+      <span>Total Events</span>
+      <strong>{{ stats.total_events }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Blocked</span>
+      <strong>{{ stats.blocked }}</strong>
+    </div>
+    <div class="stat-card">
+      <span>Critical Alerts</span>
+      <strong>{{ stats.critical }}</strong>
+    </div>
+    <div class="stat-card danger">
+      <span>Open Incidents</span>
+      <strong>{{ stats.open_incidents }}</strong>
+    </div>
+  </section>
+
+  <section class="two-column">
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Network Sensors</h3>
+      </div>
+      <div class="sensor-list">
+        {% for sensor in state.sensors %}
+          <div class="sensor-row">
+            <div>
+              <strong>{{ sensor.name }}</strong>
+              <small>{{ sensor.id }}</small>
+            </div>
+            <div class="sensor-meta">
+              <span class="status-pill status-{{ sensor.status }}">{{ sensor.status }}</span>
+              <span>{{ sensor.blocked_today }} blocked</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Top Signatures</h3>
+      </div>
+      <div class="signature-stack">
+        {% for signature, count in signatures[:5] %}
+          <div class="sig-row">
+            <div class="sig-label">
+              <span>{{ signature }}</span>
+              <strong>{{ count }}</strong>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: {{ (count / signatures[0][1] * 100) if signatures and signatures[0][1] else 0 }}%"></div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="trigger-form">
+    <div class="panel-header">
+      <h3>Trigger IPS Event</h3>
+    </div>
+    <form method="POST" action="{{ url_for('simulate_event') }}" class="form-grid">
+      <label>
+        Sensor
+        <select name="sensor">
+          {% for sensor in state.sensors %}
+            <option value="{{ sensor.id }}">{{ sensor.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Source IP
+        <input type="text" name="src_ip" value="203.0.113.88" />
+      </label>
+      <label>
+        Destination IP
+        <input type="text" name="dst_ip" value="10.25.0.14" />
+      </label>
+      <label>
+        Signature
+        <input type="text" name="signature" value="SIG-5005" />
+      </label>
+      <label>
+        Severity
+        <select name="severity">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </label>
+      <label>
+        Action
+        <select name="action">
+          <option value="alert">Alert</option>
+          <option value="monitor">Monitor</option>
+          <option value="block" selected>Block</option>
+        </select>
+      </label>
+      <label class="wide-field">
+        Summary
+        <textarea name="summary">Manual security testing trigger generated from the IPS management console.</textarea>
+      </label>
+      <button class="primary-btn" type="submit">Create Event</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Recent Security Events</h3>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Signature</th>
+          <th>Source</th>
+          <th>Severity</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in state.events[:8] %}
+          <tr>
+            <td>{{ event.timestamp }}</td>
+            <td>{{ event.signature }}</td>
+            <td>{{ event.src_ip }}</td>
+            <td><span class="severity severity-{{ event.severity }}">{{ event.severity }}</span></td>
+            <td>{{ event.action }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="topbar">
+    <div>
+      <p class="eyebrow">Response</p>
+      <h2>Incident Queue</h2>
+    </div>
+  </div>
+
+  <section class="panel">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Severity</th>
+          <th>Source</th>
+          <th>Sensor</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for incident in incidents %}
+          <tr>
+            <td>#{{ incident.id }}</td>
+            <td>{{ incident.title }}</td>
+            <td><span class="severity severity-{{ incident.severity }}">{{ incident.severity }}</span></td>
+            <td>{{ incident.src_ip }}</td>
+            <td>{{ incident.sensor }}</td>
+            <td>{{ incident.status }}</td>
+            <td>
+              {% if incident.status != 'closed' %}
+                <form method="POST" action="{{ url_for('close_incident', incident_id=incident.id) }}">
+                  <button class="secondary-btn" type="submit">Close</button>
+                </form>
+              {% else %}
+                <span>Resolved</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

@@ -1,0 +1,243 @@
+{
+  "sensors": [
+    {
+      "id": "sensor-01",
+      "name": "DMZ Web Sensor",
+      "status": "online",
+      "throughput": "2.7 Gbps",
+      "blocked_today": 138
+    },
+    {
+      "id": "sensor-02",
+      "name": "Core Network Sensor",
+      "status": "online",
+      "throughput": "3.9 Gbps",
+      "blocked_today": 242
+    },
+    {
+      "id": "sensor-03",
+      "name": "Endpoint IDS",
+      "status": "degraded",
+      "throughput": "1.3 Gbps",
+      "blocked_today": 91
+    }
+  ],
+  "policies": {
+    "mode": "inline",
+    "default_action": "deny",
+    "alert_threshold": "medium",
+    "response": "active",
+    "inspection": "deep",
+    "retention_days": 180
+  },
+  "rules": [
+    {
+      "id": 1,
+      "name": "SIG-1001",
+      "category": "Web Exploit",
+      "severity": "critical",
+      "action": "deny",
+      "description": "Detect SQL injection patterns in request strings.",
+      "enabled": true
+    },
+    {
+      "id": 2,
+      "name": "SIG-2002",
+      "category": "Brute Force",
+      "severity": "high",
+      "action": "block",
+      "description": "Multiple failed admin logins from the same source.",
+      "enabled": true
+    },
+    {
+      "id": 3,
+      "name": "SIG-3003",
+      "category": "C2 Beaconing",
+      "severity": "medium",
+      "action": "alert",
+      "description": "Periodic outbound connections to suspicious domains.",
+      "enabled": true
+    }
+  ],
+  "incidents": [
+    {
+      "id": 1005,
+      "title": "SIG-TEST2 activity from 203.0.113.251",
+      "severity": "critical",
+      "status": "open",
+      "src_ip": "203.0.113.251",
+      "sensor": "sensor-01",
+      "created_at": "2026-09-25T15:09:28Z"
+    },
+    {
+      "id": 1004,
+      "title": "SIG-TEST activity from 203.0.113.250",
+      "severity": "critical",
+      "status": "open",
+      "src_ip": "203.0.113.250",
+      "sensor": "sensor-01",
+      "created_at": "2026-09-25T15:09:18Z"
+    },
+    {
+      "id": 1003,
+      "title": "SIG-TEST activity from 203.0.113.250",
+      "severity": "critical",
+      "status": "open",
+      "src_ip": "203.0.113.250",
+      "sensor": "sensor-01",
+      "created_at": "2026-09-25T15:09:10Z"
+    },
+    {
+      "id": 1001,
+      "title": "Credential stuffing against admin portal",
+      "severity": "high",
+      "status": "open",
+      "src_ip": "203.0.113.45",
+      "sensor": "sensor-02",
+      "created_at": "2026-09-21T11:20:00Z"
+    },
+    {
+      "id": 1002,
+      "title": "Outbound command-and-control beacon",
+      "severity": "medium",
+      "status": "investigating",
+      "src_ip": "198.51.100.77",
+      "sensor": "sensor-01",
+      "created_at": "2026-09-21T09:40:00Z"
+    }
+  ],
+  "events": [
+    {
+      "id": 12,
+      "timestamp": "2026-09-25T15:09:55Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.88",
+      "dst_ip": "10.25.0.14",
+      "signature": "SIG-5005",
+      "severity": "medium",
+      "action": "block",
+      "summary": "Manual security testing trigger generated from the IPS management console1\r\n."
+    },
+    {
+      "id": 11,
+      "timestamp": "2026-09-25T15:09:43Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.88",
+      "dst_ip": "10.25.0.14",
+      "signature": "SIG-5005",
+      "severity": "medium",
+      "action": "block",
+      "summary": "Manual security testing trigger generated from the IPS management console."
+    },
+    {
+      "id": 10,
+      "timestamp": "2026-09-25T15:09:28Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.251",
+      "dst_ip": "10.10.10.51",
+      "signature": "SIG-TEST2",
+      "severity": "critical",
+      "action": "block",
+      "summary": "Flash message verification"
+    },
+    {
+      "id": 9,
+      "timestamp": "2026-09-25T15:09:18Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.250",
+      "dst_ip": "10.10.10.50",
+      "signature": "SIG-TEST",
+      "severity": "critical",
+      "action": "block",
+      "summary": "Flash message verification"
+    },
+    {
+      "id": 8,
+      "timestamp": "2026-09-25T15:09:10Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.250",
+      "dst_ip": "10.10.10.50",
+      "signature": "SIG-TEST",
+      "severity": "critical",
+      "action": "block",
+      "summary": "Flash message verification"
+    },
+    {
+      "id": 7,
+      "timestamp": "2026-09-25T15:08:26Z",
+      "sensor": "sensor-03",
+      "src_ip": "203.0.113.88",
+      "dst_ip": "10.25.0.14",
+      "signature": "SIG-5005",
+      "severity": "medium",
+      "action": "block",
+      "summary": "Manual security testing trigger generated from the IPS management console."
+    },
+    {
+      "id": 6,
+      "timestamp": "2026-09-25T15:08:15Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.88",
+      "dst_ip": "10.25.0.14",
+      "signature": "SIG-5005",
+      "severity": "medium",
+      "action": "block",
+      "summary": "Manual security testing trigger generated from the IPS management console."
+    },
+    {
+      "id": 5,
+      "timestamp": "2026-09-25T15:08:12Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.88",
+      "dst_ip": "10.25.0.14",
+      "signature": "SIG-5005",
+      "severity": "medium",
+      "action": "block",
+      "summary": "Manual security testing trigger generated from the IPS management console."
+    },
+    {
+      "id": 1,
+      "timestamp": "2026-09-21T12:35:00Z",
+      "sensor": "sensor-01",
+      "src_ip": "203.0.113.45",
+      "dst_ip": "10.20.30.45",
+      "signature": "SIG-1001",
+      "severity": "critical",
+      "action": "block",
+      "summary": "SQLi payload matched in HTTP request body."
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-09-21T12:18:00Z",
+      "sensor": "sensor-02",
+      "src_ip": "198.51.100.77",
+      "dst_ip": "172.16.10.8",
+      "signature": "SIG-3003",
+      "severity": "medium",
+      "action": "alert",
+      "summary": "Beaconing to suspicious external domain."
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-09-21T11:48:00Z",
+      "sensor": "sensor-02",
+      "src_ip": "203.0.113.1",
+      "dst_ip": "10.10.10.25",
+      "signature": "SIG-2002",
+      "severity": "high",
+      "action": "block",
+      "summary": "Repeated failed login attempts on admin service."
+    },
+    {
+      "id": 4,
+      "timestamp": "2026-09-21T11:30:00Z",
+      "sensor": "sensor-03",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "10.0.0.90",
+      "signature": "SIG-3003",
+      "severity": "low",
+      "action": "monitor",
+      "summary": "Low confidence suspicious beaconing pattern observed."
+    }
+  ]
+}
