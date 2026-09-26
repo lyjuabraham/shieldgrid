@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="topbar">
+    <div>
+      <p class="eyebrow">Policy</p>
+      <h2>Security Enforcement</h2>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Operational Policy</h3>
+    </div>
+
+    <form method="POST" action="{{ url_for('update_policy') }}" class="policy-grid">
+      <label>
+        Mode
+        <select name="mode">
+          <option value="inline" {% if policies.mode == 'inline' %}selected{% endif %}>Inline</option>
+          <option value="tap" {% if policies.mode == 'tap' %}selected{% endif %}>Tap</option>
+          <option value="monitor" {% if policies.mode == 'monitor' %}selected{% endif %}>Monitor</option>
+        </select>
+      </label>
+      <label>
+        Default Action
+        <select name="default_action">
+          <option value="deny" {% if policies.default_action == 'deny' %}selected{% endif %}>Deny</option>
+          <option value="allow" {% if policies.default_action == 'allow' %}selected{% endif %}>Allow</option>
+          <option value="alert" {% if policies.default_action == 'alert' %}selected{% endif %}>Alert</option>
+        </select>
+      </label>
+      <label>
+        Alert Threshold
+        <select name="alert_threshold">
+          <option value="low" {% if policies.alert_threshold == 'low' %}selected{% endif %}>Low</option>
+          <option value="medium" {% if policies.alert_threshold == 'medium' %}selected{% endif %}>Medium</option>
+          <option value="high" {% if policies.alert_threshold == 'high' %}selected{% endif %}>High</option>
+        </select>
+      </label>
+      <label>
+        Response Method
+        <select name="response">
+          <option value="active" {% if policies.response == 'active' %}selected{% endif %}>Active</option>
+          <option value="passive" {% if policies.response == 'passive' %}selected{% endif %}>Passive</option>
+          <option value="quarantine" {% if policies.response == 'quarantine' %}selected{% endif %}>Quarantine</option>
+        </select>
+      </label>
+      <label>
+        Inspection Depth
+        <select name="inspection">
+          <option value="deep" {% if policies.inspection == 'deep' %}selected{% endif %}>Deep</option>
+          <option value="standard" {% if policies.inspection == 'standard' %}selected{% endif %}>Standard</option>
+          <option value="basic" {% if policies.inspection == 'basic' %}selected{% endif %}>Basic</option>
+        </select>
+      </label>
+      <label>
+        Retention Days
+        <input type="number" name="retention_days" value="{{ policies.retention_days }}" />
+      </label>
+      <button class="primary-btn" type="submit">Save Policy</button>
+    </form>
+  </section>
+
+  <section class="panel" style="margin-top:20px;">
+    <div class="panel-header">
+      <h3>Sensor Health</h3>
+    </div>
+    <div class="sensor-list">
+      {% for sensor in sensors %}
+        <div class="sensor-row">
+          <div>
+            <strong>{{ sensor.name }}</strong>
+            <small>{{ sensor.id }}</small>
+          </div>
+          <div class="sensor-meta">
+            <span class="status-pill status-{{ sensor.status }}">{{ sensor.status }}</span>
+            <span>{{ sensor.throughput }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
